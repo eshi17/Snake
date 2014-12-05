@@ -42,49 +42,53 @@ void loop()
   Update direction if button is pressed
   Update update player based on direction
   */
-  DrawPx(xplayer, yplayer, White);
+  gameOver(); 
+  drawSnake();
+  DrawPx(snakeArray[0].x, snakeArray[0].y, White);
+  DrawPx(xapple, yapple, Red);
   DisplaySlate();
   delay(200);
   ClearSlate();
+  updateSnake();
   
   if (dir == 0)
   {
-    (yplayer = yplayer+1);
+    snakeArray[0].y++;
   }
   
-  if (yplayer > 7)
+  if (snakeArray[0].y > 7)
   {
-    (yplayer = 0);
+    (snakeArray[0].y = 0);
   }
  
   if (dir == 90)
   {
-    (xplayer = xplayer+1);
+    snakeArray[0].x++;
   }
   
-  if (xplayer > 7)
+  if (snakeArray[0].x > 7)
   {
-    (xplayer = 0);
+    (snakeArray[0].x = 0);
   }
  
   if (dir == 180)
   {
-    (yplayer = yplayer-1);
+    snakeArray[0].y--;
   }
   
-  if (yplayer < 0)
+  if (snakeArray[0].y < 0)
   {
-    (yplayer = 7);
+    (snakeArray[0].y = 7);
   }  
   
   if (dir == 270)
   {
-    (xplayer = xplayer-1);
+    snakeArray[0].x--;
   }
   
-  if (xplayer < 0)
+  if (snakeArray[0].x < 0)
   {
-    (xplayer = 7);
+    (snakeArray[0].x = 7);
   }
 
   
@@ -106,15 +110,13 @@ void loop()
     (dir = 0);
   }
   
-  DrawPx(xapple, yapple, Red);
-  DisplaySlate();
-  
-  if (xapple == xplayer)
+  if (xapple == snakeArray[0].x)
   {
-    if (yapple == yplayer)
+    if (yapple == snakeArray[0].y)
     {
       xapple = random(8);
       yapple = random(8);
+      marker++;
     }
   }
 }
@@ -123,6 +125,23 @@ void drawSnake()
 {
   for (int i = 0; i < marker; i++)
   {
-    DrawPx(snakeArray[i].x, snakeArray[i].y, White);
+    DrawPx(snakeArray[i].x, snakeArray[i].y, Violet);
+  }
+}
+
+void updateSnake()
+{
+  for (int i = marker-1; i>0; i--)
+  {
+    snakeArray[i] = snakeArray[i-1];
+  }
+}
+
+void gameOver()
+{
+  CheckButtonsPress();
+  {
+    if (Button_A)
+      ClearSlate();
   }
 }
