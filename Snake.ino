@@ -34,61 +34,66 @@ void setup()                    // run once, when the sketch starts
 void loop()
 {
   /*
-  Draw player - call drawSnake();
-  Draw Apple
+  Draw player (snake head) - call drawSnake();
   Display Slate/Delay 100
-  Correct for wrap
   Check Buttons
   Update direction if button is pressed
   Update update player based on direction
+  Correct for wrap
+  Draw Apples (random location)
+    Eating apples increases marker (snake body number)
+  Draw body of snake
+  Increasing marker of snake
+  Game over (Button_A and go on body) 
+
   */
   gameOver(); 
   drawSnake();
   DrawPx(snakeArray[0].x, snakeArray[0].y, White);
   DrawPx(xapple, yapple, Red);
   DisplaySlate();
-  delay(200);
+  delay(170);//a reasonable speed that that doesn't delay reactiont time
   ClearSlate();
   updateSnake();
   
-  if (dir == 0)
+  if (dir == 0) //up
   {
     snakeArray[0].y++;
   }
   
   if (snakeArray[0].y > 7)
   {
-    (snakeArray[0].y = 0);
+    (snakeArray[0].y = 0);//wrap
   }
  
-  if (dir == 90)
+  if (dir == 90) //right
   {
     snakeArray[0].x++;
   }
   
   if (snakeArray[0].x > 7)
   {
-    (snakeArray[0].x = 0);
+    (snakeArray[0].x = 0);//wrap
   }
  
-  if (dir == 180)
+  if (dir == 180)//down
   {
     snakeArray[0].y--;
   }
   
   if (snakeArray[0].y < 0)
   {
-    (snakeArray[0].y = 7);
+    (snakeArray[0].y = 7);//wrap
   }  
   
-  if (dir == 270)
+  if (dir == 270)//left
   {
     snakeArray[0].x--;
   }
   
   if (snakeArray[0].x < 0)
   {
-    (snakeArray[0].x = 7);
+    (snakeArray[0].x = 7);//wrap
   }
 
   
@@ -116,7 +121,7 @@ void loop()
     {
       xapple = random(8);
       yapple = random(8);
-      marker++;
+      marker++;//when snake touches apple, marker increases and apple relocates
     }
   }
 }
@@ -139,9 +144,24 @@ void updateSnake()
 
 void gameOver()
 {
-  CheckButtonsPress();
+  CheckButtonsDown();
   {
-    if (Button_A)
-      ClearSlate();
+    if (Button_A) //body will restart if a button is pressed
+    {
+      (marker = 3); //snake becomes 3
+      Tone_Start(ToneD6,100);
+      delay(100);
+      Tone_Start(ToneC6,100);
+    }
+  }
+  for (int i = 1; i < marker; i++)
+  {
+    if(snakeArray[0].x == snakeArray[i].x && snakeArray[0].y == snakeArray[i].y) //code for if snake head touches snake body (from Mrs. Kiang's snake code)
+    {
+      (marker = 3); //snake becomes 3
+      Tone_Start(ToneD6,100);
+      delay(100);
+      Tone_Start(ToneC6,100);
+    }
   }
 }
